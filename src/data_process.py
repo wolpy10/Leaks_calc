@@ -1,15 +1,19 @@
+from pathlib import Path
 import json
 import math
 from units import *
 
 
 class Pump:
+    __data_path = Path(__file__).resolve().parent / "data"
     __data = {}
     __leaks = {}
 
     def load_params():
         try:
-            with open("input_data.json", "r", encoding="utf-8") as file:
+            with open(
+                Pump.__data_path / "input_data.json", "r", encoding="utf-8"
+            ) as file:
                 Pump.__data = json.load(file)
             Pump.__process_data()
         except FileNotFoundError:
@@ -62,7 +66,9 @@ class Pump:
         Pump.__leaks = results
         print(results)
         try:
-            with open("output_data.json", "w", encoding="utf-8") as file:
+            with open(
+                Pump.__data_path / "output_data.json", "w", encoding="utf-8"
+            ) as file:
                 file.writelines(json.dumps(Pump.__leaks))
         except FileNotFoundError:
             print("File not found")
