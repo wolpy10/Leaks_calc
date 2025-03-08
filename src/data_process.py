@@ -31,10 +31,6 @@ class Pump:
                 "z": int(Pump.__data["impeller"]["z"]),
                 "betta2": float(Pump.__data["impeller"]["betta2"]) * deg,
                 "sigma2": float(Pump.__data["impeller"]["sigma2"]) * mm,
-                "D_seal": float(Pump.__data["impeller"]["D_seal"]) * mm,
-                "L_seal": float(Pump.__data["impeller"]["L_seal"]) * mm,
-                "delta": float(Pump.__data["impeller"]["delta"]) * mm,
-                "nu": float(Pump.__data["impeller"]["nu"]) * sSt,
             }
             data_inducer = {
                 "D1_ind": float(Pump.__data["inducer"]["D1_ind"]) * mm,
@@ -42,11 +38,27 @@ class Pump:
                 "n_ind": float(Pump.__data["inducer"]["n_ind"]) * rpm,
                 "betta2_ind": float(Pump.__data["inducer"]["betta2_ind"]) * deg,
             }
-            data_flow = {"Q": Pump.__data["flow"]["Q"] * m3_hr}
+            data_flow = {
+                "Q": Pump.__data["flow"]["Q"] * m3_hr,
+                "nu": float(Pump.__data["flow"]["nu"]) * sSt,
+            }
+            data_shroud_seal = {
+                "D_seal": float(Pump.__data["shroud_seal"]["D_seal"]) * mm,
+                "L_seal": float(Pump.__data["shroud_seal"]["L_seal"]) * mm,
+                "delta": float(Pump.__data["shroud_seal"]["delta"]) * mm,
+            }
+            data_hub_seal = {
+                "D_seal": float(Pump.__data["hub_seal"]["D_seal"]) * mm,
+                "L_seal": float(Pump.__data["hub_seal"]["L_seal"]) * mm,
+                "delta": float(Pump.__data["hub_seal"]["delta"]) * mm,
+            }
             Pump.__data = {
                 "impeller": data_impeller,
                 "inducer": data_inducer,
                 "flow": data_flow,
+                "shroud": data_shroud_seal,
+                "hub": data_hub_seal,
+                "shaft": data_hub_seal,
             }
         except KeyError:
             print("JSON doesn't match the template")

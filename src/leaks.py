@@ -20,29 +20,34 @@ def calc_v1u() -> float:
     return v1u
 
 
-def calc_leak(holes_exist=False, inducer_exist=False) -> float:
+def calc_leak(seal: str, holes_exist=False, inducer_exist=False) -> float:
     g = 9.807
 
-    [Q] = Pump.get_params(["Q"], "flow")
-    [n, D2, b2, D1, d_sleeve, z, betta2, sigma2, D_seal, L_seal, delta, nu] = (
-        Pump.get_params(
-            [
-                "n",
-                "D2",
-                "b2",
-                "D1",
-                "d_sleeve",
-                "z",
-                "betta2",
-                "sigma2",
-                "D_seal",
-                "L_seal",
-                "delta",
-                "nu",
-            ],
-            "impeller",
-        )
+    [Q, nu] = Pump.get_params(["Q", "nu"], "flow")
+    [
+        n,
+        D2,
+        b2,
+        D1,
+        d_sleeve,
+        z,
+        betta2,
+        sigma2,
+    ] = Pump.get_params(
+        [
+            "n",
+            "D2",
+            "b2",
+            "D1",
+            "d_sleeve",
+            "z",
+            "betta2",
+            "sigma2",
+        ],
+        "impeller",
     )
+    
+    [D_seal, L_seal, delta] = Pump.get_params(["D_seal", "L_seal", "delta"], seal)
 
     R2 = D2 / 2
 
@@ -64,10 +69,10 @@ def calc_leak(holes_exist=False, inducer_exist=False) -> float:
         v1u = calc_v1u()
     else:
         v1u = 0
-        
+
     R1 = (D1 + d_sleeve) / 2
     v2u = (H_theory * g / n + v1u * R1) / R2
-    
+
     H_seal = (
         H_theory
         - pow(v2u, 2) / (2 * g)
@@ -98,7 +103,9 @@ def calc_leak(holes_exist=False, inducer_exist=False) -> float:
 
 Pump.write_leaks(
     {
-        "Q_leak_shroud": round(calc_leak(Pump.get_params(["Q"], "flow"), inducer_exist=True) / m3_hr, 3),
+        "Q_leak_shroud": round(
+            calc_leak(inducer_exist=True, seal="shroud") / m3_hr, 3
+        ),
         "Q_leak_hub": None,
         "Q_leak_shaft": None,
     }
