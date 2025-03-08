@@ -5,7 +5,7 @@ from units import *
 
 
 class Pump:
-    __data_path = Path(__file__).resolve().parent / "data"
+    __data_path = Path(__file__).resolve().parent.parent / "data"
     __data = {}
     __leaks = {}
 
@@ -25,6 +25,8 @@ class Pump:
             data_impeller = {
                 "n": float(Pump.__data["impeller"]["n"]) * rpm,
                 "D2": float(Pump.__data["impeller"]["D2"]) * mm,
+                "D1": float(Pump.__data["impeller"]["D1"]) * mm,
+                "d_sleeve": float(Pump.__data["impeller"]["d_sleeve"]) * mm,
                 "b2": float(Pump.__data["impeller"]["b2"]) * mm,
                 "z": int(Pump.__data["impeller"]["z"]),
                 "betta2": float(Pump.__data["impeller"]["betta2"]) * deg,
@@ -35,7 +37,7 @@ class Pump:
                 "nu": float(Pump.__data["impeller"]["nu"]) * sSt,
             }
             data_inducer = {
-                "D1": float(Pump.__data["inducer"]["D1"]) * mm,
+                "D1_ind": float(Pump.__data["inducer"]["D1_ind"]) * mm,
                 "d_sleeve": float(Pump.__data["inducer"]["d_sleeve"]) * mm,
                 "n_ind": float(Pump.__data["inducer"]["n_ind"]) * rpm,
                 "betta2_ind": float(Pump.__data["inducer"]["betta2_ind"]) * deg,
@@ -64,7 +66,6 @@ class Pump:
 
     def write_leaks(results: dict):
         Pump.__leaks = results
-        print(results)
         try:
             with open(
                 Pump.__data_path / "output_data.json", "w", encoding="utf-8"

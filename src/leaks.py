@@ -5,18 +5,43 @@ from units import m3_hr
 Pump.load_params()
 
 
-def calc_v1u(Q: float):
+def calc_v1u() -> float:
+    [D1_ind, d_sleeve, n_ind, betta2_ind] = Pump.get_params(
+        ["D1_ind", "d_sleeve", "n_ind", "betta2_ind"], "inducer"
+    )
+    [Q] = Pump.get_params(["Q"], "flow")
 
-    return NotImplemented
+    D_calc = (D1_ind + d_sleeve) / 2
+    u_ind = D_calc / 2 * n_ind
+    vm2_ind = 4 * Q / (math.pi * (pow(D1_ind, 2) - pow(d_sleeve, 2)))
+    vu2_ind = u_ind - vm2_ind / math.tan(betta2_ind)
+
+    v1u = vu2_ind * D_calc / D1_ind
+    return v1u
 
 
 def calc_leak(holes_exist=False, inducer_exist=False) -> float:
     g = 9.807
 
     [Q] = Pump.get_params(["Q"], "flow")
-    [n, D2, b2, z, betta2, sigma2, D_seal, L_seal, delta, nu] = Pump.get_params(
-        ["n", "D2", "b2", "z", "betta2", "sigma2", "D_seal", "L_seal", "delta", "nu"],
-        "impeller",
+    [n, D2, b2, D1, d_sleeve, z, betta2, sigma2, D_seal, L_seal, delta, nu] = (
+        Pump.get_params(
+            [
+                "n",
+                "D2",
+                "b2",
+                "D1",
+                "d_sleeve",
+                "z",
+                "betta2",
+                "sigma2",
+                "D_seal",
+                "L_seal",
+                "delta",
+                "nu",
+            ],
+            "impeller",
+        )
     )
 
     R2 = D2 / 2
@@ -34,13 +59,15 @@ def calc_leak(holes_exist=False, inducer_exist=False) -> float:
             - R2 * Q / (2 * math.pi * b2 * psi_2 * R2 * math.tan(betta2))
         )
     )
-    if inducer_exist:
-        [D1, d_sleeve, n_ind, betta2_ind] = Pump.get_params(
-            ["D1", "d_sleeve", "n_ind", "betta2_ind"], "inducer"
-        )
-        v1u = NotImplemented
 
-    v2u = H_theory * g / (n * R2)
+    if inducer_exist:
+        v1u = calc_v1u()
+    else:
+        v1u = 0
+        
+    R1 = (D1 + d_sleeve) / 2
+    v2u = (H_theory * g / n + v1u * R1) / R2
+    
     H_seal = (
         H_theory
         - pow(v2u, 2) / (2 * g)
@@ -71,7 +98,7 @@ def calc_leak(holes_exist=False, inducer_exist=False) -> float:
 
 Pump.write_leaks(
     {
-        "Q_leak_shroud": round(calc_leak(Pump.get_params(["Q"], "flow")) / m3_hr, 3),
+        "Q_leak_shroud": round(calc_leak(Pump.get_params(["Q"], "flow"), inducer_exist=True) / m3_hr, 3),
         "Q_leak_hub": None,
         "Q_leak_shaft": None,
     }

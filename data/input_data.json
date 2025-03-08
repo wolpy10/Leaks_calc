@@ -5,6 +5,8 @@
     "impeller": {
         "n": 1480,
         "D2": 406,
+        "D1": 120,
+        "d_sleeve": 60,
         "betta2": 48,
         "b2": 26.5,
         "nu": 1,
@@ -15,9 +17,9 @@
         "delta": 0.3
     },
     "inducer": {
-        "D1": 120,
-        "d_sleeve": 60,
         "n_ind": 1480,
+        "D1_ind": 120,
+        "d_sleeve": 60,
         "betta2_ind": 30
     }
 }
