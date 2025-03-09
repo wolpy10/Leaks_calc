@@ -75,7 +75,6 @@ class Pump:
             print("The data hasn't been defined yet")
             raise TypeError
 
-    
     def __write_leaks(results: dict):
         Pump.__leaks = results
         try:
@@ -101,7 +100,7 @@ class Pump:
         v1u = vu2_ind * D_calc / D1_ind
         return v1u
 
-    def __calc_leak(seal: str, inducer_exist=False) -> float:
+    def __calc_leak(seal: str, inducer_exist=False, holes_exist=False) -> float:
         g = 9.807
 
         [Q, nu] = Pump.__get_params(["Q", "nu"], "flow")
@@ -127,7 +126,7 @@ class Pump:
             ],
             "impeller",
         )
-        
+
         [D_seal, L_seal, delta] = Pump.__get_params(["D_seal", "L_seal", "delta"], seal)
 
         R2 = D2 / 2
@@ -137,8 +136,8 @@ class Pump:
 
         u2 = n * R2
 
-        if seal == "shaft":
-            [H_seal] = Pump.__get_params(["H_stage"], "flow")
+        if holes_exist and seal == "shaft":
+                [H_seal] = Pump.__get_params(["H_stage"], "flow")
         else:
             H_theory = (
                 n
@@ -163,6 +162,14 @@ class Pump:
                 - pow(u2, 2) / (8 * g) * (1 - pow(D_seal / D2, 2))
             )
 
+            if seal == "shaft":
+                [H_stage] = Pump.__get_params(["H_stage"], "flow")
+                H_seal = H_stage - H_seal
+                print(H_seal)
+                if H_seal < 0:
+                    print("The direction of shaft flow is incorrect")
+                    raise ValueError
+
         mu0, mu1 = 1, 0.01
         while abs(mu1 - mu0) / mu0 * 100 > 0.01:
             mu0 = mu1
@@ -186,14 +193,20 @@ class Pump:
 
     def calc_leaks(inducer_exist: bool, account_shaft_leak: bool, holes_exist: bool):
         results = {}
-        leak_shroud = Pump.__calc_leak(seal="shroud", inducer_exist=inducer_exist)
+        leak_shroud = Pump.__calc_leak(
+            seal="shroud", inducer_exist=inducer_exist, holes_exist=holes_exist
+        )
         results.update({"Q_leak_shroud": round(leak_shroud / m3_hr, 3)})
         if holes_exist:
-            leak_hub = Pump.__calc_leak(seal="hub", inducer_exist=inducer_exist)
+            leak_hub = Pump.__calc_leak(
+                seal="hub", inducer_exist=inducer_exist, holes_exist=holes_exist
+            )
             results.update({"Q_leak_hub": round(leak_hub / m3_hr, 3)})
 
         if account_shaft_leak:
-            leak_shaft = Pump.__calc_leak(seal="shaft", inducer_exist=inducer_exist)
+            leak_shaft = Pump.__calc_leak(
+                seal="shaft", inducer_exist=inducer_exist, holes_exist=holes_exist
+            )
             results.update({"Q_leak_shaft": round(leak_shaft / m3_hr, 3)})
 
         Pump.__write_leaks(results)
