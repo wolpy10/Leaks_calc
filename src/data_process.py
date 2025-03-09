@@ -9,6 +9,7 @@ class Pump:
     __data = {}
     __leaks = {}
 
+    @staticmethod
     def load_params():
         try:
             with open(
@@ -20,6 +21,7 @@ class Pump:
             print("File not found")
             raise FileNotFoundError
 
+    @staticmethod
     def __process_data():
         try:
             data_impeller = {
@@ -65,6 +67,7 @@ class Pump:
             print("JSON doesn't match the template")
             raise KeyError
 
+    @staticmethod
     def __get_params(variables: list[str], part: str) -> list:
         try:
             extracted_variables = []
@@ -75,6 +78,7 @@ class Pump:
             print("The data hasn't been defined yet")
             raise TypeError
 
+    @staticmethod
     def __write_leaks(results: dict):
         Pump.__leaks = results
         try:
@@ -86,6 +90,7 @@ class Pump:
             print("File not found")
             raise FileNotFoundError
 
+    @staticmethod
     def __calc_v1u() -> float:
         [D1_ind, d_sleeve, n_ind, betta2_ind] = Pump.__get_params(
             ["D1_ind", "d_sleeve", "n_ind", "betta2_ind"], "inducer"
@@ -100,6 +105,7 @@ class Pump:
         v1u = vu2_ind * D_calc / D1_ind
         return v1u
 
+    @staticmethod
     def __calc_leak(seal: str, inducer_exist=False, holes_exist=False) -> float:
         g = 9.807
 
@@ -137,7 +143,7 @@ class Pump:
         u2 = n * R2
 
         if holes_exist and seal == "shaft":
-                [H_seal] = Pump.__get_params(["H_stage"], "flow")
+            [H_seal] = Pump.__get_params(["H_stage"], "flow")
         else:
             H_theory = (
                 n
@@ -191,6 +197,7 @@ class Pump:
         Q_leak = mu * math.pi * D_seal * delta * math.sqrt(2 * g * H_seal)
         return Q_leak
 
+    @staticmethod
     def calc_leaks(inducer_exist: bool, account_shaft_leak: bool, holes_exist: bool):
         results = {}
         leak_shroud = Pump.__calc_leak(
@@ -211,5 +218,6 @@ class Pump:
 
         Pump.__write_leaks(results)
 
+    @staticmethod
     def get_leaks():
         return Pump.__leaks
