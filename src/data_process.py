@@ -193,6 +193,7 @@ class Pump:
             )
 
             mu1 = 1 / math.sqrt(1.3 + lambda_seal * L_seal / (2 * delta))
+            
         mu = mu1
         Q_leak = mu * math.pi * D_seal * delta * math.sqrt(2 * g * H_seal)
         return Q_leak
