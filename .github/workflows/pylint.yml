@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
-        apt install python3-venv
+        sudo apt-get install python3-venv
         python3 -m venv venv
         source venv/bin/activate
         pip install < requirements.txt
