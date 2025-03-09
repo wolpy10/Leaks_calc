@@ -23,7 +23,7 @@ jobs:
         sudo apt-get install python3-venv
         python3 -m venv venv
         source venv/bin/activate
-        pip install < requirements.txt
+        pip install pylint
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
