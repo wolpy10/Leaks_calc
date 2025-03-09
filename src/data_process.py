@@ -195,7 +195,6 @@ class Pump:
         if account_shaft_leak:
             leak_shaft = Pump.__calc_leak(seal="shaft", inducer_exist=inducer_exist)
             results.update({"Q_leak_shaft": round(leak_shaft / m3_hr, 3)})
-        print(results)
 
         Pump.__write_leaks(results)
 
