@@ -7,6 +7,7 @@ from units import *
 class Pump:
     __data_path = Path(__file__).resolve().parent.parent / "data"
     __data = {}
+    __set_up = {}
     __leaks = {}
 
     @staticmethod
@@ -54,6 +55,11 @@ class Pump:
                 "D_seal": float(Pump.__data["hub_seal"]["D_seal"]) * mm,
                 "L_seal": float(Pump.__data["hub_seal"]["L_seal"]) * mm,
                 "delta": float(Pump.__data["hub_seal"]["delta"]) * mm,
+            }
+            Pump.__set_up = {
+                "inducer_exist": Pump.__data["set_up"]["inducer_exist"],
+                "account_shaft_leak": Pump.__data["set_up"]["account_shaft_leak"],
+                "holes_exist": Pump.__data["set_up"]["holes_exist"]
             }
             Pump.__data = {
                 "impeller": data_impeller,
@@ -133,7 +139,8 @@ class Pump:
             "impeller",
         )
 
-        [D_seal, L_seal, delta] = Pump.__get_params(["D_seal", "L_seal", "delta"], seal)
+        [D_seal, L_seal, delta] = Pump.__get_params(
+            ["D_seal", "L_seal", "delta"], seal)
 
         R2 = D2 / 2
 
@@ -150,7 +157,8 @@ class Pump:
                 / g
                 * (
                     pow(R2, 2) * y * n
-                    - R2 * Q / (2 * math.pi * b2 * psi_2 * R2 * math.tan(betta2))
+                    - R2 * Q / (2 * math.pi * b2 * psi_2 *
+                                R2 * math.tan(betta2))
                 )
             )
 
@@ -193,14 +201,18 @@ class Pump:
             )
 
             mu1 = 1 / math.sqrt(1.3 + lambda_seal * L_seal / (2 * delta))
-            
+
         mu = mu1
         Q_leak = mu * math.pi * D_seal * delta * math.sqrt(2 * g * H_seal)
         return Q_leak
 
     @staticmethod
-    def calc_leaks(inducer_exist: bool, account_shaft_leak: bool, holes_exist: bool):
+    def calc_leaks():
         results = {}
+        inducer_exist = Pump.__set_up["inducer_exist"]
+        account_shaft_leak = Pump.__set_up["account_shaft_leak"]
+        holes_exist = Pump.__set_up["holes_exist"]
+        
         leak_shroud = Pump.__calc_leak(
             seal="shroud", inducer_exist=inducer_exist, holes_exist=holes_exist
         )

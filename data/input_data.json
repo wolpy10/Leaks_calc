@@ -1,38 +1,43 @@
 {
+    "set_up": {
+        "inducer_exist": true,
+        "account_shaft_leak": true,
+        "holes_exist": true
+    },
     "flow": {
-        "Q": 10,
-        "H_stage": 60,
+        "Q": 120,
+        "H_stage": 70,
         "nu": 1
     },
     "impeller": {
-        "n": 1480,
-        "D2": 406,
-        "D1": 120,
+        "n": 2910,
+        "D2": 250,
+        "D1": 138,
         "d_sleeve": 60,
         "sigma2": 9,
-        "b2": 26.5,
+        "b2": 20,
         "z": 7,
         "betta2": 48
     },
     "inducer": {
-        "n_ind": 1480,
-        "D1_ind": 120,
+        "n_ind": 2910,
+        "D1_ind": 138,
         "d_sleeve": 60,
-        "betta2_ind": 30
+        "betta2_ind": 35
     },
     "shroud_seal": {
-        "D_seal": 210,
-        "L_seal": 100,
-        "delta": 0.3
+        "D_seal": 150,
+        "L_seal": 22,
+        "delta": 0.2
     },
     "hub_seal": {
-        "D_seal": 210,
-        "L_seal": 100,
-        "delta": 0.3
+        "D_seal": 150,
+        "L_seal": 20,
+        "delta": 0.2
     },
     "shaft_seal": {
-        "D_seal": 210,
-        "L_seal": 100,
-        "delta": 0.3
+        "D_seal": 60,
+        "L_seal": 35,
+        "delta": 0.2
     }
 }
