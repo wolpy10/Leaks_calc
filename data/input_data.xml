@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<root>
+    <set_up>
+        <inducer_exist>true</inducer_exist>
+        <account_shaft_leak>true</account_shaft_leak>
+        <holes_exist>true</holes_exist>
+    </set_up>
+    <flow>
+        <Q>120</Q>
+        <H_stage>70</H_stage>
+        <nu>1</nu>
+    </flow>
+    <impeller>
+        <n>2910</n>
+        <D2>250</D2>
+        <D1>138</D1>
+        <d_sleeve>60</d_sleeve>
+        <sigma2>9</sigma2>
+        <b2>20</b2>
+        <z>7</z>
+        <betta2>48</betta2>
+    </impeller>
+    <inducer>
+        <n_ind>2910</n_ind>
+        <D1_ind>138</D1_ind>
+        <d_sleeve>60</d_sleeve>
+        <betta2_ind>35</betta2_ind>
+    </inducer>
+    <shroud_seal>
+        <D_seal>150</D_seal>
+        <L_seal>22</L_seal>
+        <delta>0.2</delta>
+    </shroud_seal>
+    <hub_seal>
+        <D_seal>150</D_seal>
+        <L_seal>20</L_seal>
+        <delta>0.2</delta>
+    </hub_seal>
+    <shaft_seal>
+        <D_seal>60</D_seal>
+        <L_seal>35</L_seal>
+        <delta>0.2</delta>
+    </shaft_seal>
+</root>

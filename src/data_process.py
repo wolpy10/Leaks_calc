@@ -14,9 +14,10 @@ class Pump:
     def load_params():
         try:
             with open(
-                Pump.__data_path / "input_data.json", "r", encoding="utf-8"
+                Pump.__data_path / "input_data.xml", "r", encoding="utf-8"
             ) as file:
-                Pump.__data = json.load(file)
+                # Pump.__data = json.load(file)
+                Pump.__data = xmltodict.parse(file.read())["root"]
             Pump.__process_data()
         except FileNotFoundError:
             print("File not found")
@@ -42,7 +43,7 @@ class Pump:
                 "betta2_ind": float(Pump.__data["inducer"]["betta2_ind"]) * deg,
             }
             data_flow = {
-                "Q": Pump.__data["flow"]["Q"] * m3_hr,
+                "Q": float(Pump.__data["flow"]["Q"]) * m3_hr,
                 "nu": float(Pump.__data["flow"]["nu"]) * sSt,
                 "H_stage": float(Pump.__data["flow"]["H_stage"]) * m,
             }
@@ -57,9 +58,13 @@ class Pump:
                 "delta": float(Pump.__data["hub_seal"]["delta"]) * mm,
             }
             Pump.__set_up = {
-                "inducer_exist": Pump.__data["set_up"]["inducer_exist"],
-                "account_shaft_leak": Pump.__data["set_up"]["account_shaft_leak"],
-                "holes_exist": Pump.__data["set_up"]["holes_exist"]
+                "inducer_exist": (
+                    True if Pump.__data["set_up"]["inducer_exist"] == "true" else False
+                ),
+                "account_shaft_leak": (
+                    True if Pump.__data["set_up"]["account_shaft_leak"] else False
+                ),
+                "holes_exist": True if Pump.__data["set_up"]["holes_exist"] else False,
             }
             Pump.__data = {
                 "impeller": data_impeller,
@@ -89,9 +94,11 @@ class Pump:
         Pump.__leaks = results
         try:
             with open(
-                Pump.__data_path / "output_data.json", "w", encoding="utf-8"
+                Pump.__data_path / "output_data.xml", "w", encoding="utf-8"
             ) as file:
-                file.writelines(json.dumps(Pump.__leaks))
+                # file.writelines(json.dumps(Pump.__leaks))
+                print(Pump.__leaks)
+                file.write(xmltodict.unparse({"root": Pump.__leaks}))
         except FileNotFoundError:
             print("File not found")
             raise FileNotFoundError
@@ -139,8 +146,7 @@ class Pump:
             "impeller",
         )
 
-        [D_seal, L_seal, delta] = Pump.__get_params(
-            ["D_seal", "L_seal", "delta"], seal)
+        [D_seal, L_seal, delta] = Pump.__get_params(["D_seal", "L_seal", "delta"], seal)
 
         R2 = D2 / 2
 
@@ -157,8 +163,7 @@ class Pump:
                 / g
                 * (
                     pow(R2, 2) * y * n
-                    - R2 * Q / (2 * math.pi * b2 * psi_2 *
-                                R2 * math.tan(betta2))
+                    - R2 * Q / (2 * math.pi * b2 * psi_2 * R2 * math.tan(betta2))
                 )
             )
 
@@ -212,7 +217,7 @@ class Pump:
         inducer_exist = Pump.__set_up["inducer_exist"]
         account_shaft_leak = Pump.__set_up["account_shaft_leak"]
         holes_exist = Pump.__set_up["holes_exist"]
-        
+
         leak_shroud = Pump.__calc_leak(
             seal="shroud", inducer_exist=inducer_exist, holes_exist=holes_exist
         )
