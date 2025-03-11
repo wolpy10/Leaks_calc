@@ -63,9 +63,9 @@ class Pump:
                     True if Pump.__data["set_up"]["inducer_exist"] == "true" else False
                 ),
                 "account_shaft_leak": (
-                    True if Pump.__data["set_up"]["account_shaft_leak"] else False
+                    True if Pump.__data["set_up"]["account_shaft_leak"] == "true" else False
                 ),
-                "holes_exist": True if Pump.__data["set_up"]["holes_exist"] else False,
+                "holes_exist": True if Pump.__data["set_up"]["holes_exist"] == "true" else False,
             }
             Pump.__data = {
                 "impeller": data_impeller,
