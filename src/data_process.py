@@ -1,6 +1,6 @@
 from pathlib import Path
 import xmltodict
-import json
+# import json
 import math
 from units import *
 
@@ -60,12 +60,12 @@ class Pump:
             }
             Pump.__set_up = {
                 "inducer_exist": (
-                    True if Pump.__data["set_up"]["inducer_exist"] == "true" else False
+                    Pump.__data["set_up"]["inducer_exist"] == "true"
                 ),
                 "account_shaft_leak": (
-                    True if Pump.__data["set_up"]["account_shaft_leak"] == "true" else False
+                    Pump.__data["set_up"]["account_shaft_leak"] == "true"
                 ),
-                "holes_exist": True if Pump.__data["set_up"]["holes_exist"] == "true" else False,
+                "holes_exist": Pump.__data["set_up"]["holes_exist"] == "true",
             }
             Pump.__data = {
                 "impeller": data_impeller,
