@@ -1,6 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<root>
-    <Q_leak_shroud>4.284</Q_leak_shroud>
-    <Q_leak_hub>4.476</Q_leak_hub>
-    <Q_leak_shaft>6.877</Q_leak_shaft>
-</root>
+<root><Q_leak_shroud>4.6</Q_leak_shroud><Q_leak_hub>4.824</Q_leak_hub><Q_leak_shaft>9.781</Q_leak_shaft></root>
