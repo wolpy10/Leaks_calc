@@ -6,11 +6,11 @@ import math
 import importlib.util
 import sys
 
-module_path = "D:\\Files\\Work\\Hydrodynamic\\leaks\\src"
+module_path = "D:\\Files\\Work\\Hydrodynamic\\leaks\\src" # the path to the calc script needs to be changed
 module_name = "units"
 
 spec = importlib.util.spec_from_file_location(
-    module_name, module_path + f"{module_path}\\{module_name}.py"
+    module_name, f"{module_path}\\{module_name}.py"
 )
 module = importlib.util.module_from_spec(spec)
 sys.modules[module_name] = module
